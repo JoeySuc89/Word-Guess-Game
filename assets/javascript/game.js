@@ -3,8 +3,15 @@ var rightGuess = [];
 var wrongGuess = [];
 var guess; //user guess
 var letterKeys = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",]
-console.log(wordBank)
+var wins = 0;
+var losses = 0;
+var remainingGuesses = 10;
 
+var winsText = document.getElementById("wins-text");
+var lossesText = document.getElementById("losses-text");
+var guessesLeft = document.getElementById("guesses-left");
+console.log(wordBank)
+// picks random word for the user to guess
 function getRanWord() {
   var randomIndex = Math.floor(Math.random() * wordBank.length);
   return wordBank[randomIndex]
@@ -14,6 +21,7 @@ var randomWord = getRanWord()
 
 console.log(randomWord)
 
+// typing the correct letters will show up in place of underscores
 function start() {
   for (i = 0; i < randomWord.length; i++) {
     rightGuess[i] = "_";
@@ -21,7 +29,11 @@ function start() {
   document.getElementById("answer").innerHTML = rightGuess.join(" ");
   console.log(wordBank)
 }
+document.onkeyup = function() {
+  resetWord();
+  resetVar();
 
+}
 function checkLetter() {
   document.onkeyup = function(event) {
     guess = event.key.toLowerCase();
@@ -32,17 +44,44 @@ function checkLetter() {
           rightGuess[i] = guess;
           document.getElementById("answer").innerHTML = rightGuess.join(" ");
           found = true;
+
         }
       }
+
       if (found) return;
+      winsText ++;
       if (wrongGuess.indexOf(guess) < 0) {
         wrongGuess.push(guess);
         document.getElementById("incorrect").innerHTML = wrongGuess.join(" ");
+        remainingGuesses--;
+        document.getElementById("guesses-left").innerHTML = remainingGuesses;
 
+        if (remainingGuesses === 0) {
+          resetWord();
+          document.getElementById("losses-text").innerHTML = lossesText;
+          lossesText +1;
+
+
+
+        }
      }
     }
   }
 }
 
+function resetWord() {
+  var randomIndex = Math.floor(Math.random() * wordBank.length);
+  return wordBank[randomIndex];
+  currentWord = wordBank[randWord];
+  wordList.splice(randWord, 1);
+  for (i = 0; i < currentWord.length; i++) {
+    wordBank.push("_");
+    document.getElementById("answer").innerHTML = wordBank.join(" ");
+  }
+}
+
+
+
 start();
 checkLetter();
+resetWord();
