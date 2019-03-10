@@ -7,8 +7,8 @@ var wins = 0;
 var losses = 0;
 var remainingGuesses = 10;
 
-var winsText = document.getElementById("wins-text");
-var lossesText = document.getElementById("losses-text");
+var wins = document.getElementById("wins-text");
+var losses = document.getElementById("losses-text");
 var guessesLeft = document.getElementById("guesses-left");
 console.log(wordBank)
 // picks random word for the user to guess
@@ -44,12 +44,14 @@ function checkLetter() {
           rightGuess[i] = guess;
           document.getElementById("answer").innerHTML = rightGuess.join(" ");
           found = true;
-
+          start();
+            if (rightGuess.join(" ") == randomWord) {
+              document.getElementById("wins-text") = "wins" + 1;
+              wins++;
+            }
         }
       }
-
       if (found) return;
-      winsText ++;
       if (wrongGuess.indexOf(guess) < 0) {
         wrongGuess.push(guess);
         document.getElementById("incorrect").innerHTML = wrongGuess.join(" ");
@@ -57,11 +59,10 @@ function checkLetter() {
         document.getElementById("guesses-left").innerHTML = remainingGuesses;
 
         if (remainingGuesses === 0) {
+          document.getElementById("losses-text").innerHTML = losses + 1;
+          losses++;
+          console.log(losses);
           resetWord();
-          document.getElementById("losses-text").innerHTML = lossesText;
-          lossesText +1;
-
-
 
         }
      }
